@@ -12,8 +12,10 @@ import { styles } from "./styles";
 import { TextInput } from "react-native-gesture-handler";
 import { COLORS } from "../../utils/colors";
 import Button from "../../components/button";
+import { useNavigation } from "@react-navigation/native";
 
 const Login = () => {
+  const navigation = useNavigation();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -32,11 +34,10 @@ const Login = () => {
       setErrorMessage("O email inserido é inválido");
       return;
     }
-
     setLoading(true);
-
     try {
       await login({ email, password });
+      navigation.navigate("Initial" as never);
     } catch (err: any) {
       setErrorMessage("O email ou senha inseridos estão incorretos");
     } finally {
