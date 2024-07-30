@@ -22,6 +22,8 @@ interface ButtonProps {
   padding?: number;
   width?: number;
   height?: number;
+  disabled?: boolean;
+  children?: React.ReactNode;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -36,6 +38,8 @@ const Button: React.FC<ButtonProps> = ({
   width,
   height,
   fontFamily = "Poppins-Regular",
+  disabled = false,
+  children,
 }) => {
   return (
     <TouchableOpacity
@@ -51,16 +55,21 @@ const Button: React.FC<ButtonProps> = ({
         buttonStyle,
       ]}
       onPress={onPress}
+      disabled={disabled}
     >
-      <Text
-        style={[
-          styles.text,
-          { color: textColor, fontSize: fontSize, fontFamily: fontFamily },
-          textStyle,
-        ]}
-      >
-        {title}
-      </Text>
+      {children ? (
+        children
+      ) : (
+        <Text
+          style={[
+            styles.text,
+            { color: textColor, fontSize: fontSize, fontFamily: fontFamily },
+            textStyle,
+          ]}
+        >
+          {title}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };
