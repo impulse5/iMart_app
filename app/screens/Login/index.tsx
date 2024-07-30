@@ -11,7 +11,7 @@ import { styles } from "./styles";
 import { TextInput } from "react-native-gesture-handler";
 import Button from "../../components/button";
 
-const Login = ({ navigation }: { navigation: any }) => {
+const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
