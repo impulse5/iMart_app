@@ -1,19 +1,31 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { styles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../contexts/authContext";
 import Button from "../../components/button";
+import { LogOut } from "lucide-react-native";
+import { COLORS } from "../../utils/colors";
 
 export default function Initial() {
   const navigation = useNavigation();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+
+  function handleLogout() {
+    logout();
+    navigation.navigate("Login" as never);
+    console.log("deslogado chefe!");
+  }
+
   return (
     <View style={styles.background}>
       <Image
         style={styles.image}
         source={require("../../../assets/images/imart_logo_white.png")}
       />
+      <TouchableOpacity style={styles.logoutIcon} onPress={handleLogout}>
+        <LogOut color={COLORS.off_white} size={24} strokeWidth={3} />
+      </TouchableOpacity>
       <View style={styles.container}>
         <View style={styles.hero}>
           <Image

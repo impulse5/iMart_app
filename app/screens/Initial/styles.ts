@@ -47,4 +47,9 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     color: COLORS.primary,
   },
+  logoutIcon: {
+    position: "absolute",
+    top: 30,
+    left: "90%",
+  },
 });
