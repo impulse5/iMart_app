@@ -50,6 +50,6 @@ export const styles = StyleSheet.create({
   logoutIcon: {
     position: "absolute",
     top: 30,
-    left: "90%",
+    right: 10,
   },
 });
