@@ -12,7 +12,7 @@ import { COLORS } from "../utils/colors";
 
 interface ButtonProps {
   onPress: (event: GestureResponderEvent) => void;
-  title: string;
+  title?: string;
   color?: string;
   textColor?: string;
   fontFamily?: string;
