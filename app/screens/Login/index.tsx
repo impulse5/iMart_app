@@ -43,7 +43,6 @@ const Login = () => {
       setErrorMessage("O email ou senha inseridos estão incorretos");
     } finally {
       setLoading(false);
-      // Limpar os campos de entrada
       setEmail("");
       setPassword("");
     }
@@ -51,7 +50,7 @@ const Login = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.background}>
           <Image
             style={styles.image}
