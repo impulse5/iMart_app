@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
 import { login as loginService } from "../services/authService";
 import { LoginRequest, LoginResponse } from "../types/authType";
+import { useNavigation } from "@react-navigation/native";
 
 interface AuthContextType {
   user: LoginResponse["user"] | null;
@@ -15,6 +16,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const navigation = useNavigation();
   const [user, setUser] = useState<LoginResponse["user"] | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [error, setError] = useState<string>("");
@@ -23,6 +25,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     try {
       const result = await loginService(loginData);
       console.log("logado!");
+      navigation.navigate("Initial" as never);
       setUser(result.user);
       setToken(result.token);
       setError("");

@@ -38,7 +38,6 @@ const Login = () => {
     setLoading(true);
     try {
       await login({ email, password });
-      navigation.navigate("Initial" as never);
     } catch (err: any) {
       setErrorMessage("O email ou senha inseridos estão incorretos");
     } finally {
