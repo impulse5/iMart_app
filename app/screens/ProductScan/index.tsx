@@ -1,14 +1,19 @@
-import { CameraView, useCameraPermissions } from "expo-camera";
+import {
+  CameraView,
+  useCameraPermissions,
+  BarcodeScanningResult,
+} from "expo-camera";
 import { styles } from "./styles";
 import { useState, useEffect } from "react";
-import { Button, Text, TouchableOpacity, View } from "react-native";
+import { Button, Text, TouchableOpacity, View, Alert } from "react-native";
 import { CameraIcon, ChevronLeft, QrCode } from "lucide-react-native";
 import { useNavigation } from "@react-navigation/native";
 
 export default function ProductScanning() {
   const navigation = useNavigation();
   const [permission, requestPermission] = useCameraPermissions();
-  const [isCameraReady, setIsCameraReady] = useState(false);
+  const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
+  const [scanned, setScanned] = useState<boolean>(false);
 
   function adminNavigate() {
     navigation.navigate("ProductAttribs" as never);
@@ -29,6 +34,17 @@ export default function ProductScanning() {
   if (!permission) {
     return <View />;
   }
+
+  const handleBarcodeScanned = ({ data }: BarcodeScanningResult) => {
+    if (scanned) {
+      return;
+    }
+    setScanned(true);
+    Alert.alert("Código Escaneado", `ID: ${data}`);
+    setTimeout(() => {
+      setScanned(false);
+    }, 3000);
+  };
 
   if (!permission.granted) {
     return (
@@ -51,7 +67,15 @@ export default function ProductScanning() {
         <Text style={styles.headerTitle}>Escanear Produto</Text>
       </View>
       {isCameraReady ? (
-        <CameraView style={styles.camera} facing="back">
+        <CameraView
+          style={styles.camera}
+          facing="back"
+          onBarcodeScanned={handleBarcodeScanned}
+          barcodeScannerSettings={{
+            barcodeTypes: ["ean13", "ean8"],
+          }}
+          onCameraReady={() => setIsCameraReady(true)}
+        >
           <View style={styles.buttonContainer}></View>
         </CameraView>
       ) : (
