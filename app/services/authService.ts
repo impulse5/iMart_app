@@ -1,8 +1,6 @@
 import axios from "axios";
 import { LoginRequest, LoginResponse, LoginError } from "../types/authType";
-
-const API_URL = "https://imart-s238.onrender.com";
-
+import { API_URL } from "../constants/api";
 export const login = async (
   loginData: LoginRequest
 ): Promise<LoginResponse> => {

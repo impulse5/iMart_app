@@ -49,7 +49,7 @@ export const styles = StyleSheet.create({
   },
   logoutIcon: {
     position: "absolute",
-    top: 30,
+    top: 60,
     right: 10,
   },
 });

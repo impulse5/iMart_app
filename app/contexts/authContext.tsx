@@ -38,6 +38,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const logout = () => {
     setUser(null);
     setToken(null);
+    navigation.navigate("Login" as never);
   };
 
   return (
