@@ -11,21 +11,9 @@ import { useNavigation } from "@react-navigation/native";
 import { ChevronLeft } from "lucide-react-native";
 import { styles } from "./styles";
 
-// mockando por enquanto
-const product = {
-  name: "Creatina Pure Growth - 250g",
-  lot: "102938",
-  code: "7891234567890",
-  supplier: "Growth Supplements",
-  price: "103,99",
-  category: "Suplemento Alimentício",
-  measurement: "UND",
-  quantity: 2,
-};
-
 export default function ProductAttribs({ route }: any) {
   const navigation = useNavigation();
-  // const { product } = route.params;
+  const { product } = route.params;
   const [quantity, setQuantity] = useState(product.quantity.toString());
 
   function handleReturn() {

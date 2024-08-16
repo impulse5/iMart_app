@@ -20,7 +20,7 @@ export default function Initial() {
     navigation.navigate("ProductScanning" as never);
   }
   function stockInquiry() {
-    navigation.navigate("Login" as never);
+    navigation.navigate("ProductScanningEdit" as never);
   }
 
   return (
@@ -53,9 +53,7 @@ export default function Initial() {
           />
           <Button
             title={"Consultar estoque"}
-            onPress={() => {
-              navigation.navigate("Login" as never);
-            }}
+            onPress={stockInquiry}
             height={60}
             buttonStyle={{
               width: "80%",

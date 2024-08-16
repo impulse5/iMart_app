@@ -3,16 +3,19 @@ import { View, Text } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { styles } from "./styles";
 import { CircleCheckBig } from "lucide-react-native";
-import { COLORS } from "../../utils/colors";
-import Button from "../../components/button";
+import { COLORS } from "../../../utils/colors";
+import Button from "../../../components/button";
 
-export default function SucessRegister() {
+export default function SucessEdit() {
   const navigation = useNavigation();
   const route = useRoute();
-  const { productName } = route.params as { productName: string };
+  const { productName, productQuantity } = route.params as {
+    productName: string;
+    productQuantity: number;
+  };
 
   function repeatOperation() {
-    navigation.navigate("ProductScanning" as never);
+    navigation.navigate("ProductScanningEdit" as never);
   }
 
   function backToHome() {
@@ -23,9 +26,10 @@ export default function SucessRegister() {
     <View style={styles.container}>
       <CircleCheckBig height={150} width={150} color={COLORS.success} />
       <View style={styles.textContent}>
-        <Text style={styles.text}>Lote</Text>
+        <Text style={styles.text}>Alterações salvas</Text>
+        <Text style={styles.text}>com sucesso!</Text>
         <Text style={styles.textProductName}>{productName}</Text>
-        <Text style={styles.text}>Cadastrado com sucesso!</Text>
+        <Text style={styles.textProductName}>{productQuantity}</Text>
       </View>
       <View style={styles.viewButton}>
         <Button

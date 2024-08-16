@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { COLORS } from "../../utils/colors";
+import { COLORS } from "../../../utils/colors";
 import Constants from "expo-constants";
 
 export const styles = StyleSheet.create({
@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
   },
   textProductName: {
     fontSize: 24,
-    fontFamily: "Poppins-SemiBold",
+    fontFamily: "Poppins-ExtraLight",
     textAlign: "center",
   },
 });
