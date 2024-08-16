@@ -47,7 +47,6 @@ export const styles = StyleSheet.create({
     fontFamily: "Poppins-ExtraLight",
     textAlign: "center",
     fontSize: 25,
-    marginBottom: 64,
   },
   infoText: {
     fontSize: 22,

@@ -10,15 +10,37 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { ChevronLeft } from "lucide-react-native";
 import { styles } from "./styles";
+import { postStorage } from "../../../services/storageService";
 
 export default function ProductAttribs({ route }: any) {
+  const product = {
+    name: "Creme de Cabelo",
+    lot: "102938",
+    code: "7891150060883",
+    supplier: "Seda",
+    price: "10,99",
+    category: "Higiene",
+    measurement: "UND",
+    quantity: 1,
+  };
   const navigation = useNavigation();
-  const { product } = route.params;
+  // const { data } = route.params;
   const [quantity, setQuantity] = useState(product.quantity.toString());
 
   function handleReturn() {
     navigation.goBack();
   }
+
+  // async function handleSave() {
+  //   try {
+  //     const productID = await postStorage(data);
+  //     // @ts-ignore
+  //     navigation.navigate("SucessRegister" as never, {
+  //       productName: product.name,
+  //     });
+  //     console.log("Estoque editado, nova quantidade:", quantity);
+  //   } catch {}
+  // }
 
   function handleSave() {
     // @ts-ignore
@@ -71,7 +93,7 @@ export default function ProductAttribs({ route }: any) {
               style={styles.input}
               value={quantity}
               keyboardType="numeric"
-              onChangeText={setQuantity}
+              // onChangeText={setQuantity}
             />
           </View>
         </View>

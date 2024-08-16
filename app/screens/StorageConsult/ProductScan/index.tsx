@@ -40,26 +40,28 @@ export default function ProductScanningEdit() {
     if (scanned) {
       return;
     }
-    try {
-      const productData = await getProductById(data);
-      // @ts-ignore
-      navigation.navigate("ProductAttribs", {
-        product: {
-          name: productData.product.data.attributes.name,
-          code: productData.product.data.attributes.barcode,
-          supplier: productData.product.data.attributes.supplier.name,
-          price: productData.product.data.attributes.price,
-          category: productData.product.data.attributes.category.name,
-          measurement: "UND",
-        },
-      });
-    } catch (error) {
-      Alert.alert("Erro", "Não foi possível encontrar o produto.");
-    } finally {
-      setTimeout(() => {
-        setScanned(false);
-      }, 3000);
-    }
+    setScanned(true);
+    Alert.alert(`ID do produto: ${data}`);
+    // try {
+    //   const productData = await getProductById(data);
+    // @ts-ignore
+    navigation.navigate("ProductAttribsEdit", {
+      // product: {
+      //   name: productData.product.data.attributes.name,
+      //   code: productData.product.data.attributes.barcode,
+      //   supplier: productData.product.data.attributes.supplier.name,
+      //   price: productData.product.data.attributes.price,
+      //   category: productData.product.data.attributes.category.name,
+      //   measurement: "UND",
+      // },
+    });
+    // } catch (error) {
+    // Alert.alert("Erro", "Não foi possível encontrar o produto.");
+    // } finally {
+    setTimeout(() => {
+      setScanned(false);
+    }, 3000);
+    // }
   };
 
   if (!permission.granted) {

@@ -11,6 +11,7 @@ import ProductScanningEdit from "../screens/StorageConsult/ProductScan";
 import ProductAttribsEdit from "../screens/StorageConsult/ProductAttribs";
 import SucessEdit from "../screens/StorageConsult/SucessEdit";
 import ProductEdit from "../screens/StorageConsult/ProductEdit";
+import SucessDelete from "../screens/StorageConsult/SucessDelete";
 
 const Stack = createStackNavigator();
 
@@ -33,6 +34,7 @@ const Routes = () => {
       <Stack.Screen name="ProductAttribsEdit" component={ProductAttribsEdit} />
       <Stack.Screen name="SucessEdit" component={SucessEdit} />
       <Stack.Screen name="ProductEdit" component={ProductEdit} />
+      <Stack.Screen name="SucessDelete" component={SucessDelete} />
     </Stack.Navigator>
   );
 };

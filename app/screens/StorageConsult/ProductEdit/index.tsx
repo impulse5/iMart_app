@@ -31,10 +31,6 @@ export default function ProductEdit({ route }: any) {
     navigation.goBack();
   }
 
-  function handleDelete() {
-    console.log("clicou");
-  }
-
   function handleSave() {
     // @ts-ignore
     navigation.navigate("SucessEdit" as never, {

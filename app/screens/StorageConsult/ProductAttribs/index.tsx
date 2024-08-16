@@ -7,23 +7,23 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Modal,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ChevronLeft } from "lucide-react-native";
 import { styles } from "./styles";
-import Button from "../../../components/button";
 
 export default function ProductAttribsEdit({ route }: any) {
   // mock
   const product = {
-    name: "Creatina Pure Growth - 250g",
+    name: "Creme de Cabelo",
     lot: "102938",
-    code: "7891234567890",
-    supplier: "Growth Supplements",
-    price: "103,99",
-    category: "Suplemento Alimentício",
+    code: "7891150060883",
+    supplier: "Seda",
+    price: "10,99",
+    category: "Higiene",
     measurement: "UND",
-    quantity: 2,
+    quantity: 1,
   };
   const navigation = useNavigation();
   const [quantity, setQuantity] = useState(product.quantity.toString());
@@ -40,19 +40,20 @@ export default function ProductAttribsEdit({ route }: any) {
 
   function confirmDelete() {
     if (lotConfirmation === product.lot) {
-      // Aqui você chamaria o serviço de exclusão, por exemplo:
       // deleteProduct(product.id);
-      console.log("Produto excluído");
+      Alert.alert("Estoque excluído");
       setModalVisible(false);
-      navigation.goBack(); // Voltar após a exclusão
+      navigation.navigate("SucessDelete" as never);
     } else {
-      console.log("Identificação do lote incorreta");
+      Alert.alert("Identificação do lote incorreta");
     }
   }
 
   function handleEdit() {
     navigation.navigate("ProductEdit" as never);
   }
+
+  const isConfirmButtonEnabled = lotConfirmation === product.lot;
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -106,7 +107,6 @@ export default function ProductAttribsEdit({ route }: any) {
           </TouchableOpacity>
         </View>
 
-        {/* Modal de Confirmação */}
         <Modal
           animationType="slide"
           transparent={true}
@@ -119,7 +119,7 @@ export default function ProductAttribsEdit({ route }: any) {
             <View style={styles.modalView}>
               <Text style={styles.modalTitle}>Você tem certeza?</Text>
               <Text style={styles.modalMessage}>
-                Caso deseje excluir, digite a identificação (# {product.lot}) do
+                Caso deseje excluir, digite a identificação ({product.lot}) do
                 lote no campo abaixo
               </Text>
               <TextInput
@@ -135,9 +135,29 @@ export default function ProductAttribsEdit({ route }: any) {
                 >
                   <Text style={styles.modalCancelButtonText}>Cancelar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   style={[styles.modalButton, styles.modalConfirmButton]}
                   onPress={confirmDelete}
+                >
+                  <Text
+                    style={styles.modalConfirmButtonText}
+                    onPress={() => {
+                      navigation.navigate("SucessDelete" as never);
+                    }}
+                  >
+                    Confirmar
+                  </Text>
+                </TouchableOpacity> */}
+                <TouchableOpacity
+                  style={[
+                    styles.modalButton,
+                    styles.modalConfirmButton,
+                    {
+                      backgroundColor: isConfirmButtonEnabled ? "red" : "gray",
+                    },
+                  ]}
+                  onPress={confirmDelete}
+                  disabled={!isConfirmButtonEnabled}
                 >
                   <Text style={styles.modalConfirmButtonText}>Confirmar</Text>
                 </TouchableOpacity>
