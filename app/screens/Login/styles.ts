@@ -53,5 +53,7 @@ export const styles = StyleSheet.create({
     color: COLORS.error,
     fontFamily: "Poppins-Regular",
     fontSize: 16,
+    maxWidth: "80%",
+    textAlign: "center",
   },
 });

@@ -24,14 +24,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const login = async (loginData: LoginRequest) => {
     try {
       const result = await loginService(loginData);
-      console.log("logado!");
-      navigation.navigate("Initial" as never);
       setUser(result.user);
       setToken(result.token);
       setError("");
+      navigation.navigate("Initial" as never);
     } catch (err: any) {
-      setError(err.message);
-      console.log("DEU RUIM");
+      setError(err.message || "Algo deu errado, tente novamente.");
     }
   };
 
