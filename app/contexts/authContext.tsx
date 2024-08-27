@@ -1,7 +1,14 @@
-import React, { createContext, useState, useContext, ReactNode } from "react";
+import React, {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+  useEffect,
+} from "react";
 import { login as loginService } from "../services/authService";
 import { LoginRequest, LoginResponse } from "../types/authType";
 import { useNavigation } from "@react-navigation/native";
+import { api } from "../constants/api";
 
 interface AuthContextType {
   user: LoginResponse["user"] | null;
@@ -32,6 +39,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setError(err.message || "Algo deu errado, tente novamente.");
     }
   };
+
+  useEffect(() => {
+    if (token) {
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    } else {
+      delete api.defaults.headers.common["Authorization"];
+    }
+  }, [token]);
 
   const logout = () => {
     setUser(null);

@@ -1,8 +1,8 @@
-import { API_URL } from "../constants/api";
+import { api } from "../constants/api";
 
 export const getProductById = async (id: any) => {
   try {
-    const response = await API_URL.get(`/products/${id}`);
+    const response = await api.get(`/products/${id}`);
     return response.data;
   } catch (error) {
     console.error("Erro ao obter o produto:", error);
@@ -10,10 +10,10 @@ export const getProductById = async (id: any) => {
   }
 };
 
-export const postStorage = async (id_produto: number) => {
+export const postStorage = async (product_id: string, quantity: string) => {
   try {
-    const response = await API_URL.post(`/storage/${id_produto}`, {
-      quantity: id_produto,
+    const response = await api.post(`/storages`, {
+      storage: { product_id, quantity },
     });
     return response.data;
   } catch (error) {
