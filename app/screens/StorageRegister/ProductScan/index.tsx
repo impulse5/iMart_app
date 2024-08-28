@@ -6,7 +6,7 @@ import {
 import { styles } from "./styles";
 import { useState, useEffect } from "react";
 import { Button, Text, TouchableOpacity, View, Alert } from "react-native";
-import { CameraIcon, ChevronLeft, QrCode } from "lucide-react-native";
+import { CameraIcon, ChevronLeft, ScanBarcode } from "lucide-react-native";
 import { useNavigation } from "@react-navigation/native";
 import { getProductById } from "../../../services/storageService";
 
@@ -15,10 +15,6 @@ export default function ProductScanning() {
   const [permission, requestPermission] = useCameraPermissions();
   const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
   const [scanned, setScanned] = useState<boolean>(false);
-
-  function adminNavigate() {
-    navigation.navigate("ProductAttribs" as never);
-  }
 
   function handleReturn() {
     navigation.navigate("Initial" as never);
@@ -36,54 +32,34 @@ export default function ProductScanning() {
     return <View />;
   }
 
-  const handleBarcodeScanned = ({ data }: BarcodeScanningResult) => {
+  const handleBarcodeScanned = async ({ data }: BarcodeScanningResult) => {
+    setScanned(true);
     if (scanned) {
       return;
     }
-    setScanned(true);
-    Alert.alert(`ID do produto: ${data}`);
-    // @ts-ignore
-    navigation.navigate("ProductAttribs", {
-      // product: {
-      //   name: productData.product.data.attributes.name,
-      //   code: productData.product.data.attributes.barcode,
-      //   supplier: productData.product.data.attributes.supplier.name,
-      //   price: productData.product.data.attributes.price,
-      //   category: productData.product.data.attributes.category.name,
-      //   measurement: "UND",
-      // }
-    });
-    setTimeout(() => {
-      setScanned(false);
-    }, 3000);
+    try {
+      const productData = await getProductById(data);
+      // @ts-ignore
+      navigation.navigate("ProductAttribs", {
+        product: {
+          name: productData.product.data.attributes.name,
+          code: productData.product.data.attributes.barcode,
+          supplier: productData.product.data.attributes.supplier.name,
+          price: productData.product.data.attributes.price,
+          category: productData.product.data.attributes.category.name,
+          measurement: "UND",
+          quantity: productData.product.data.attributes.quantity || 1,
+        },
+        data,
+      });
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível encontrar o produto.");
+    } finally {
+      setTimeout(() => {
+        setScanned(false);
+      }, 3000);
+    }
   };
-
-  // const handleBarcodeScanned = async ({ data }: BarcodeScanningResult) => {
-  //   if (scanned) {
-  //     return;
-  //   }
-  //   try {
-  //     const productData = await getProductById(data);
-  //     // @ts-ignore
-  //     navigation.navigate("ProductAttribs", {
-  //       product: {
-  //         name: productData.product.data.attributes.name,
-  //         code: productData.product.data.attributes.barcode,
-  //         supplier: productData.product.data.attributes.supplier.name,
-  //         price: productData.product.data.attributes.price,
-  //         category: productData.product.data.attributes.category.name,
-  //         measurement: "UND",
-  //       },
-  //       data,
-  //     });
-  //   } catch (error) {
-  //     Alert.alert("Erro", "Não foi possível encontrar o produto.");
-  //   } finally {
-  //     setTimeout(() => {
-  //       setScanned(false);
-  //     }, 3000);
-  //   }
-  // };
 
   if (!permission.granted) {
     return (
@@ -124,13 +100,10 @@ export default function ProductScanning() {
       )}
       <View style={styles.cameraBorder} />
       <View style={styles.mainView}>
-        <QrCode height={120} width={120} color="black" />
+        <ScanBarcode height={120} width={120} color="black" />
         <Text style={styles.mainText}>
           Escaneie o código de barras do produto para continuar
         </Text>
-        <TouchableOpacity onPress={adminNavigate}>
-          <Text>AVANÇAR(dev)</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );

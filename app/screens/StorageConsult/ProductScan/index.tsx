@@ -5,20 +5,16 @@ import {
 } from "expo-camera";
 import { styles } from "./styles";
 import { useState, useEffect } from "react";
-import { Button, Text, TouchableOpacity, View, Alert } from "react-native";
+import { Button, Text, TouchableOpacity, View } from "react-native";
 import { CameraIcon, ChevronLeft, QrCode } from "lucide-react-native";
 import { useNavigation } from "@react-navigation/native";
-import { getProductById } from "../../../services/storageService";
+import { getStorageById } from "../../../services/storageService";
 
 export default function ProductScanningEdit() {
   const navigation = useNavigation();
   const [permission, requestPermission] = useCameraPermissions();
   const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
   const [scanned, setScanned] = useState<boolean>(false);
-
-  function adminNavigate() {
-    navigation.navigate("ProductAttribsEdit" as never);
-  }
 
   function handleReturn() {
     navigation.navigate("Initial" as never);
@@ -37,31 +33,32 @@ export default function ProductScanningEdit() {
   }
 
   const handleBarcodeScanned = async ({ data }: BarcodeScanningResult) => {
+    setScanned(true);
     if (scanned) {
       return;
     }
-    setScanned(true);
-    Alert.alert(`ID do produto: ${data}`);
-    // try {
-    //   const productData = await getProductById(data);
-    // @ts-ignore
-    navigation.navigate("ProductAttribsEdit", {
-      // product: {
-      //   name: productData.product.data.attributes.name,
-      //   code: productData.product.data.attributes.barcode,
-      //   supplier: productData.product.data.attributes.supplier.name,
-      //   price: productData.product.data.attributes.price,
-      //   category: productData.product.data.attributes.category.name,
-      //   measurement: "UND",
-      // },
-    });
-    // } catch (error) {
-    // Alert.alert("Erro", "Não foi possível encontrar o produto.");
-    // } finally {
-    setTimeout(() => {
-      setScanned(false);
-    }, 3000);
-    // }
+    try {
+      const [, storageId] = data.split("###");
+      const storageData = await getStorageById(storageId);
+      // @ts-ignore
+      navigation.navigate("ProductAttribsEdit", {
+        storage: {
+          name: storageData.storage.data.attributes.product.name,
+          code: storageData.storage.data.attributes.product.barcode,
+          supplier: storageData.storage.data.attributes.product.supplier.name,
+          measurement: "UND",
+          quantity: storageData.storage.data.attributes.quantity,
+          lot: storageData.storage.data.attributes.batch,
+        },
+        dataStorage: storageId,
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        setScanned(false);
+      }, 3000);
+    }
   };
 
   if (!permission.granted) {
@@ -90,7 +87,7 @@ export default function ProductScanningEdit() {
           facing="back"
           onBarcodeScanned={handleBarcodeScanned}
           barcodeScannerSettings={{
-            barcodeTypes: ["ean13", "ean8"],
+            barcodeTypes: ["qr"],
           }}
           onCameraReady={() => setIsCameraReady(true)}
         >
@@ -105,11 +102,8 @@ export default function ProductScanningEdit() {
       <View style={styles.mainView}>
         <QrCode height={120} width={120} color="black" />
         <Text style={styles.mainText}>
-          Escaneie o código de barras do produto para continuar
+          Escaneie o QR code do estoque para continuar
         </Text>
-        <TouchableOpacity onPress={adminNavigate}>
-          <Text>AVANÇAR(dev)</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );

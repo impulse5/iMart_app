@@ -6,13 +6,9 @@ import { CircleCheckBig } from "lucide-react-native";
 import { COLORS } from "../../../utils/colors";
 import Button from "../../../components/button";
 
-export default function SucessDelete() {
+export default function SucessDelete({ route }: any) {
   const navigation = useNavigation();
-  const route = useRoute();
-  // const { productName, productQuantity } = route.params as {
-  //   productName: string;
-  //   productQuantity: number;
-  // };
+  const lotProduct = route.params;
 
   function repeatOperation() {
     navigation.navigate("ProductScanningEdit" as never);
@@ -26,10 +22,9 @@ export default function SucessDelete() {
     <View style={styles.container}>
       <CircleCheckBig height={150} width={150} color={COLORS.success} />
       <View style={styles.textContent}>
-        <Text style={styles.text}>Estoque Deletado</Text>
-        <Text style={styles.text}>com sucesso!</Text>
-        {/* <Text style={styles.textProductName}>{productName}</Text> */}
-        {/* <Text style={styles.textProductName}>{productQuantity}</Text> */}
+        <Text style={styles.text}>Lote</Text>
+        <Text style={styles.text}>#{lotProduct}</Text>
+        <Text style={styles.text}>Deletado com sucesso!</Text>
       </View>
       <View style={styles.viewButton}>
         <Button

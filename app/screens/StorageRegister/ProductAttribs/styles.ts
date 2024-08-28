@@ -34,6 +34,7 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 20,
     width: "100%",
+    marginLeft: "auto",
   },
   productName: {
     fontSize: 25,
@@ -61,18 +62,19 @@ export const styles = StyleSheet.create({
   quantityContainer: {
     flexDirection: "column",
     marginVertical: 10,
+    marginHorizontal: "auto",
     width: "100%",
   },
   input: {
     borderWidth: 1,
+    color: COLORS.primary,
     borderColor: "#ccc",
     borderRadius: 5,
-    padding: 20,
-    marginLeft: 10,
-    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     textAlign: "center",
-    width: "100%",
     fontSize: 22,
+    width: "100%",
   },
   buttonContainer: {
     marginTop: 20,
