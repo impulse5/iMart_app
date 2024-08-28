@@ -18,8 +18,8 @@ import Button from "../../../components/button";
 import { COLORS } from "../../../utils/colors";
 
 export default function ProductAttribs({ route }: any) {
-  const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
   const navigation = useNavigation();
+  const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const { data, product } = route.params;
   const [quantity, setQuantity] = useState<string>(

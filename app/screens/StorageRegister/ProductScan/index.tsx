@@ -6,7 +6,7 @@ import {
 import { styles } from "./styles";
 import { useState, useEffect } from "react";
 import { Button, Text, TouchableOpacity, View, Alert } from "react-native";
-import { CameraIcon, ChevronLeft, QrCode } from "lucide-react-native";
+import { CameraIcon, ChevronLeft, ScanBarcode } from "lucide-react-native";
 import { useNavigation } from "@react-navigation/native";
 import { getProductById } from "../../../services/storageService";
 
@@ -100,7 +100,7 @@ export default function ProductScanning() {
       )}
       <View style={styles.cameraBorder} />
       <View style={styles.mainView}>
-        <QrCode height={120} width={120} color="black" />
+        <ScanBarcode height={120} width={120} color="black" />
         <Text style={styles.mainText}>
           Escaneie o código de barras do produto para continuar
         </Text>

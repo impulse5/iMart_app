@@ -6,38 +6,42 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ChevronLeft } from "lucide-react-native";
 import { styles } from "./styles";
+import Button from "../../../components/button";
+import { COLORS } from "../../../utils/colors";
+import { updateStorage } from "../../../services/storageService";
 
 export default function ProductEdit({ route }: any) {
-  // mockando por enquanto
-  const product = {
-    name: "Creatina Pure Growth - 250g",
-    lot: "102938",
-    code: "7891234567890",
-    supplier: "Growth Supplements",
-    price: "103,99",
-    category: "Suplemento Alimentício",
-    measurement: "UND",
-    quantity: 1,
-  };
   const navigation = useNavigation();
-  // const { product } = route.params;
-  const [quantity, setQuantity] = useState(product.quantity.toString());
+  const { storage, dataStorage } = route.params;
+  const [quantity, setQuantity] = useState(storage.quantity);
+  const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   function handleReturn() {
     navigation.goBack();
   }
 
-  function handleSave() {
-    // @ts-ignore
-    navigation.navigate("SucessEdit" as never, {
-      productName: product.name,
-      productQuantity: product.quantity,
-    });
-    console.log("Estoque editado, nova quantidade:", quantity);
+  async function handleSave() {
+    setLoading(true);
+    try {
+      await updateStorage(dataStorage, quantity);
+      // @ts-ignore
+      navigation.navigate("SucessEdit" as never, {
+        productName: storage.name,
+        productQuantity: quantity,
+      });
+    } catch {
+      console.log("falhou a edição");
+    } finally {
+      setLoading(false);
+      console.log("Estoque editado, nova quantidade:", quantity);
+      console.log(dataStorage);
+    }
   }
 
   return (
@@ -52,46 +56,66 @@ export default function ProductEdit({ route }: any) {
         </View>
 
         <View style={styles.content}>
-          <Text style={styles.productName}>{product.name}</Text>
-          <Text style={styles.productLot}>
-            <Text>Lote #{product.lot}</Text>
-          </Text>
-
-          <Text style={styles.infoText}>
-            <Text style={styles.label}>Código: </Text>
-            <Text style={styles.labelInfo}>{product.code}</Text>
-          </Text>
-          <Text style={styles.infoText}>
-            <Text style={styles.label}>Fornecedor: </Text>
-            <Text style={styles.labelInfo}>{product.supplier}</Text>
-          </Text>
-          <Text style={styles.infoText}>
-            <Text style={styles.label}>Preço: </Text>
-            <Text style={styles.labelInfo}>R${product.price}</Text>
-          </Text>
-          <Text style={styles.infoText}>
-            <Text style={styles.label}>Categoria: </Text>
-            <Text style={styles.labelInfo}>{product.category}</Text>
-          </Text>
-          <Text style={styles.infoText}>
-            <Text style={styles.label}>Mensuração: </Text>
-            <Text style={styles.labelInfo}>{product.measurement}</Text>
-          </Text>
+          <Text style={styles.productName}>{storage.name}</Text>
+          <View style={styles.productLot}>
+            <Text style={styles.productLotText}>Lote</Text>
+            <Text style={styles.productLotText}>#{storage.lot}</Text>
+          </View>
+          {!isInputFocused && (
+            <View>
+              <Text style={styles.infoText}>
+                <Text style={styles.label}>Código: </Text>
+                <Text style={styles.labelInfo}>{storage.code}</Text>
+              </Text>
+              <Text style={styles.infoText}>
+                <Text style={styles.label}>Fornecedor: </Text>
+                <Text style={styles.labelInfo}>{storage.supplier}</Text>
+              </Text>
+              <Text style={styles.infoText}>
+                <Text style={styles.label}>Mensuração: </Text>
+                <Text style={styles.labelInfo}>{storage.measurement}</Text>
+              </Text>
+            </View>
+          )}
           <View style={styles.quantityContainer}>
             <Text style={styles.label}>Quantidade: </Text>
             <TextInput
               style={styles.input}
-              value={quantity}
+              onChangeText={(v) => {
+                if (!isNaN(Number(v))) {
+                  setQuantity(v);
+                }
+              }}
+              editable={!loading}
+              value={quantity ? String(quantity) : "1"}
+              placeholder="Quantidade"
               keyboardType="numeric"
-              onChangeText={setQuantity}
+              onFocus={() => setIsInputFocused(true)}
+              onBlur={() => setIsInputFocused(false)}
             />
           </View>
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-            <Text style={styles.saveButtonText}>Salvar Alterações</Text>
-          </TouchableOpacity>
+          {!isInputFocused && (
+            <Button
+              title={loading ? "" : "Salvar Alterações"}
+              onPress={handleSave}
+              height={60}
+              buttonStyle={{
+                width: "80%",
+                marginBottom: 24,
+                marginHorizontal: "auto",
+                backgroundColor: loading
+                  ? COLORS.gray_secondary
+                  : COLORS.primary,
+              }}
+              fontFamily="Poppins-Bold"
+              disabled={loading}
+            >
+              {loading && <ActivityIndicator size="small" color="#ffffff" />}
+            </Button>
+          )}
         </View>
       </View>
     </TouchableWithoutFeedback>

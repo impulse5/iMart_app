@@ -42,12 +42,14 @@ export const styles = StyleSheet.create({
     fontFamily: "Poppins-Regular",
     textAlign: "center",
   },
-  productLot: {
+  productLotText: {
     color: COLORS.gray_primary,
     fontFamily: "Poppins-ExtraLight",
-    textAlign: "center",
     fontSize: 25,
+  },
+  productLot: {
     marginBottom: 64,
+    alignItems: "center",
   },
   infoText: {
     fontSize: 22,
@@ -131,10 +133,9 @@ export const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 24,
-    fontWeight: "bold",
     marginBottom: 10,
     textAlign: "center",
-    fontFamily: "Poppins-Regular",
+    fontFamily: "Poppins-Bold",
   },
   modalMessage: {
     fontSize: 18,
@@ -144,9 +145,11 @@ export const styles = StyleSheet.create({
   },
   modalInput: {
     borderWidth: 1,
+    color: COLORS.primary,
     borderColor: "#ccc",
     borderRadius: 5,
-    padding: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     width: "100%",
     fontSize: 18,
     marginBottom: 20,
@@ -157,6 +160,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     width: "100%",
+    gap: 4,
   },
   modalButton: {
     padding: 10,
@@ -179,6 +183,11 @@ export const styles = StyleSheet.create({
     color: COLORS.secondary,
     fontSize: 18,
     fontFamily: "Poppins-Regular",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "auto",
+    margin: "auto",
   },
   modalText: {
     fontSize: 16,

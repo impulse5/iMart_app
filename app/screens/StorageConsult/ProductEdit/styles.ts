@@ -42,11 +42,14 @@ export const styles = StyleSheet.create({
     fontFamily: "Poppins-Regular",
     textAlign: "center",
   },
-  productLot: {
+  productLotText: {
     color: COLORS.gray_primary,
     fontFamily: "Poppins-ExtraLight",
-    textAlign: "center",
     fontSize: 25,
+  },
+  productLot: {
+    marginBottom: 64,
+    alignItems: "center",
   },
   infoText: {
     fontSize: 22,
@@ -59,19 +62,18 @@ export const styles = StyleSheet.create({
   },
   quantityContainer: {
     flexDirection: "column",
-    marginVertical: 10,
     width: "100%",
   },
   input: {
     borderWidth: 1,
+    color: COLORS.primary,
     borderColor: "#ccc",
     borderRadius: 5,
-    padding: 20,
-    marginLeft: 10,
-    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     textAlign: "center",
-    width: "100%",
     fontSize: 22,
+    width: "100%",
   },
   buttonContainer: {
     marginTop: 20,

@@ -7,28 +7,22 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Modal,
-  Alert,
+  Platform,
+  KeyboardAvoidingView,
+  ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ChevronLeft } from "lucide-react-native";
 import { styles } from "./styles";
+import { deleteStorage } from "../../../services/storageService";
 
 export default function ProductAttribsEdit({ route }: any) {
-  // mock
-  const product = {
-    name: "Creme de Cabelo",
-    lot: "102938",
-    code: "7891150060883",
-    supplier: "Seda",
-    price: "10,99",
-    category: "Higiene",
-    measurement: "UND",
-    quantity: 1,
-  };
   const navigation = useNavigation();
-  const [quantity, setQuantity] = useState(product.quantity.toString());
+  const { dataStorage, storage } = route.params;
   const [modalVisible, setModalVisible] = useState(false);
   const [lotConfirmation, setLotConfirmation] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const lotProduct = storage.lot;
 
   function handleReturn() {
     navigation.goBack();
@@ -38,22 +32,32 @@ export default function ProductAttribsEdit({ route }: any) {
     setModalVisible(true);
   }
 
-  function confirmDelete() {
-    if (lotConfirmation === product.lot) {
-      // deleteProduct(product.id);
-      Alert.alert("Estoque excluído");
-      setModalVisible(false);
-      navigation.navigate("SucessDelete" as never);
+  async function confirmDelete() {
+    setLoading(true);
+    if (lotConfirmation === storage.lot) {
+      try {
+        await deleteStorage(dataStorage);
+        // @ts-ignore
+        navigation.navigate("SucessDelete" as never, lotProduct);
+        console.log(lotProduct);
+      } catch (error) {
+        console.log("nao foi possível deletar");
+        throw error;
+      } finally {
+        setModalVisible(false);
+        setLoading(false);
+      }
     } else {
-      Alert.alert("Identificação do lote incorreta");
+      console.log("Identificação do lote incorreta");
     }
   }
 
-  function handleEdit() {
-    navigation.navigate("ProductEdit" as never);
+  function goToEdit() {
+    // @ts-ignore
+    navigation.navigate("ProductEdit", { storage, dataStorage });
   }
 
-  const isConfirmButtonEnabled = lotConfirmation === product.lot;
+  const isConfirmButtonEnabled = lotConfirmation === storage.lot;
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -67,34 +71,30 @@ export default function ProductAttribsEdit({ route }: any) {
         </View>
 
         <View style={styles.content}>
-          <Text style={styles.productName}>{product.name}</Text>
-          <Text style={styles.productLot}>
-            <Text>Lote #{product.lot}</Text>
-          </Text>
+          <Text style={styles.productName}>{storage.name}</Text>
+          <View style={styles.productLot}>
+            <Text style={styles.productLotText}>Lote</Text>
+            <Text style={styles.productLotText}>#{storage.lot}</Text>
+          </View>
 
           <Text style={styles.infoText}>
             <Text style={styles.label}>Código: </Text>
-            <Text style={styles.labelInfo}>{product.code}</Text>
+            <Text style={styles.labelInfo}>{storage.code}</Text>
           </Text>
+
           <Text style={styles.infoText}>
             <Text style={styles.label}>Fornecedor: </Text>
-            <Text style={styles.labelInfo}>{product.supplier}</Text>
+            <Text style={styles.labelInfo}>{storage.supplier}</Text>
           </Text>
-          <Text style={styles.infoText}>
-            <Text style={styles.label}>Preço: </Text>
-            <Text style={styles.labelInfo}>R${product.price}</Text>
-          </Text>
-          <Text style={styles.infoText}>
-            <Text style={styles.label}>Categoria: </Text>
-            <Text style={styles.labelInfo}>{product.category}</Text>
-          </Text>
+
           <Text style={styles.infoText}>
             <Text style={styles.label}>Mensuração: </Text>
-            <Text style={styles.labelInfo}>{product.measurement}</Text>
+            <Text style={styles.labelInfo}>{storage.measurement}</Text>
           </Text>
+
           <Text style={styles.infoText}>
             <Text style={styles.label}>Quantidade: </Text>
-            <Text style={styles.labelInfo}>{product.quantity}</Text>
+            <Text style={styles.labelInfo}>{storage.quantity}</Text>
           </Text>
         </View>
 
@@ -102,7 +102,7 @@ export default function ProductAttribsEdit({ route }: any) {
           <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
             <Text style={styles.buttonText}>Excluir Item</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
+          <TouchableOpacity style={styles.editButton} onPress={goToEdit}>
             <Text style={styles.buttonText}>Editar Estoque</Text>
           </TouchableOpacity>
         </View>
@@ -115,55 +115,57 @@ export default function ProductAttribsEdit({ route }: any) {
             setModalVisible(!modalVisible);
           }}
         >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalTitle}>Você tem certeza?</Text>
-              <Text style={styles.modalMessage}>
-                Caso deseje excluir, digite a identificação ({product.lot}) do
-                lote no campo abaixo
-              </Text>
-              <TextInput
-                style={styles.modalInput}
-                value={lotConfirmation}
-                onChangeText={setLotConfirmation}
-                placeholder={`#${product.lot}`}
-              />
-              <View style={styles.modalButtonContainer}>
-                <TouchableOpacity
-                  style={[styles.modalButton, styles.modalCancelButton]}
-                  onPress={() => setModalVisible(false)}
-                >
-                  <Text style={styles.modalCancelButtonText}>Cancelar</Text>
-                </TouchableOpacity>
-                {/* <TouchableOpacity
-                  style={[styles.modalButton, styles.modalConfirmButton]}
-                  onPress={confirmDelete}
-                >
-                  <Text
-                    style={styles.modalConfirmButtonText}
-                    onPress={() => {
-                      navigation.navigate("SucessDelete" as never);
-                    }}
-                  >
-                    Confirmar
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <KeyboardAvoidingView
+              style={{ flex: 1 }}
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+            >
+              <View style={styles.modalContainer}>
+                <View style={styles.modalView}>
+                  <Text style={styles.modalTitle}>Você tem certeza?</Text>
+                  <Text style={styles.modalMessage}>
+                    Caso deseje excluir, digite a identificação ({storage.lot})
+                    do lote no campo abaixo
                   </Text>
-                </TouchableOpacity> */}
-                <TouchableOpacity
-                  style={[
-                    styles.modalButton,
-                    styles.modalConfirmButton,
-                    {
-                      backgroundColor: isConfirmButtonEnabled ? "red" : "gray",
-                    },
-                  ]}
-                  onPress={confirmDelete}
-                  disabled={!isConfirmButtonEnabled}
-                >
-                  <Text style={styles.modalConfirmButtonText}>Confirmar</Text>
-                </TouchableOpacity>
+                  <TextInput
+                    style={styles.modalInput}
+                    value={lotConfirmation}
+                    onChangeText={setLotConfirmation}
+                    placeholder={`${storage.lot}`}
+                  />
+                  <View style={styles.modalButtonContainer}>
+                    <TouchableOpacity
+                      style={[styles.modalButton, styles.modalCancelButton]}
+                      onPress={() => setModalVisible(false)}
+                    >
+                      <Text style={styles.modalCancelButtonText}>Cancelar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[
+                        styles.modalButton,
+                        styles.modalConfirmButton,
+                        {
+                          backgroundColor: isConfirmButtonEnabled
+                            ? "red"
+                            : "gray",
+                        },
+                      ]}
+                      onPress={confirmDelete}
+                      disabled={!isConfirmButtonEnabled}
+                    >
+                      <Text style={styles.modalConfirmButtonText}>
+                        {loading ? (
+                          <ActivityIndicator size="small" color="#ffffff" />
+                        ) : (
+                          "Confirmar"
+                        )}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
               </View>
-            </View>
-          </View>
+            </KeyboardAvoidingView>
+          </TouchableWithoutFeedback>
         </Modal>
       </View>
     </TouchableWithoutFeedback>
