@@ -22,6 +22,9 @@ export default function Initial() {
   function stockInquiry() {
     navigation.navigate("ProductScanningEdit" as never);
   }
+  function stockMovement() {
+    navigation.navigate("StorageScanMovement" as never);
+  }
 
   return (
     <View style={styles.background}>
@@ -54,6 +57,14 @@ export default function Initial() {
           <Button
             title={"Consultar estoque"}
             onPress={stockInquiry}
+            height={60}
+            buttonStyle={{
+              width: "80%",
+            }}
+          />
+          <Button
+            title={"Mover Estoques"}
+            onPress={stockMovement}
             height={60}
             buttonStyle={{
               width: "80%",

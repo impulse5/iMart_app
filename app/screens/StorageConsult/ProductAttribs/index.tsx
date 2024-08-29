@@ -10,6 +10,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ChevronLeft } from "lucide-react-native";
@@ -41,7 +42,7 @@ export default function ProductAttribsEdit({ route }: any) {
         navigation.navigate("SucessDelete" as never, lotProduct);
         console.log(lotProduct);
       } catch (error) {
-        console.log("nao foi possível deletar");
+        Alert.alert("Erro", "Não foi possível deletar o estoque.");
         throw error;
       } finally {
         setModalVisible(false);
@@ -85,6 +86,13 @@ export default function ProductAttribsEdit({ route }: any) {
           <Text style={styles.infoText}>
             <Text style={styles.label}>Fornecedor: </Text>
             <Text style={styles.labelInfo}>{storage.supplier}</Text>
+          </Text>
+
+          <Text style={styles.infoText}>
+            <Text style={styles.label}>Status: </Text>
+            <Text style={styles.labelInfo}>
+              {storage.on_shelf ? "Em Prateleira" : "Em Estoque"}
+            </Text>
           </Text>
 
           <Text style={styles.infoText}>

@@ -53,3 +53,16 @@ export const deleteStorage = async (id: string) => {
     throw error;
   }
 };
+
+export const moveStorages = async (storageIds: string[]) => {
+  try {
+    const response = await api.put("/storages/mass_move", {
+      storage_ids: storageIds,
+    });
+    console.log(storageIds);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao mover os estoques:", error);
+    throw error;
+  }
+};

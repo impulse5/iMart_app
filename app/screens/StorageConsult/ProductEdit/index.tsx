@@ -72,6 +72,12 @@ export default function ProductEdit({ route }: any) {
                 <Text style={styles.labelInfo}>{storage.supplier}</Text>
               </Text>
               <Text style={styles.infoText}>
+                <Text style={styles.label}>Status: </Text>
+                <Text style={styles.labelInfo}>
+                  {storage.on_shelf ? "Em Prateleira" : "Em Estoque"}
+                </Text>
+              </Text>
+              <Text style={styles.infoText}>
                 <Text style={styles.label}>Mensuração: </Text>
                 <Text style={styles.labelInfo}>{storage.measurement}</Text>
               </Text>

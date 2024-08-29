@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AuthProvider } from "./app/contexts/authContext";
 import Loading from "./app/components/loading";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -24,12 +25,14 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <AuthProvider>
-        <SafeAreaProvider>
-          <Routes />
-        </SafeAreaProvider>
-      </AuthProvider>
-    </NavigationContainer>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer>
+        <AuthProvider>
+          <SafeAreaProvider>
+            <Routes />
+          </SafeAreaProvider>
+        </AuthProvider>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
