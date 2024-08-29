@@ -49,6 +49,7 @@ export default function ProductScanningEdit() {
           measurement: "UND",
           quantity: storageData.storage.data.attributes.quantity,
           lot: storageData.storage.data.attributes.batch,
+          on_shelf: storageData.storage.data.attributes.on_shelf,
         },
         dataStorage: storageId,
       });

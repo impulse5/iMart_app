@@ -13,6 +13,9 @@ import SucessEdit from "../screens/StorageConsult/SucessEdit";
 import ProductEdit from "../screens/StorageConsult/ProductEdit";
 import SucessDelete from "../screens/StorageConsult/SucessDelete";
 
+import StorageScanMovement from "../screens/StorageMovement/StorageScan";
+import SucessMove from "../screens/StorageMovement/SucessMove";
+
 const Stack = createStackNavigator();
 
 const Routes = () => {
@@ -35,6 +38,12 @@ const Routes = () => {
       <Stack.Screen name="SucessEdit" component={SucessEdit} />
       <Stack.Screen name="ProductEdit" component={ProductEdit} />
       <Stack.Screen name="SucessDelete" component={SucessDelete} />
+
+      <Stack.Screen
+        name="StorageScanMovement"
+        component={StorageScanMovement}
+      />
+      <Stack.Screen name="SucessMove" component={SucessMove} />
     </Stack.Navigator>
   );
 };

@@ -26,6 +26,8 @@ const Login = () => {
     setLoading(true);
     try {
       await login({ email, password });
+      setEmail("");
+      setPassword("");
     } finally {
       setLoading(false);
     }
