@@ -1,20 +1,38 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import "react-native-gesture-handler";
+import { useFonts } from "expo-font";
+import Routes from "./app/routes";
+import { NavigationContainer } from "@react-navigation/native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { AuthProvider } from "./app/contexts/authContext";
+import Loading from "./app/components/loading";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    "Poppins-Black": require("./assets/fonts/Poppins-Black.ttf"),
+    "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
+    "Poppins-ExtraBold": require("./assets/fonts/Poppins-ExtraBold.ttf"),
+    "Poppins-ExtraLight": require("./assets/fonts/Poppins-ExtraLight.ttf"),
+    "Poppins-Light": require("./assets/fonts/Poppins-ExtraLight.ttf"),
+    "Poppins-Medium": require("./assets/fonts/Poppins-Medium.ttf"),
+    "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
+    "Poppins-SemiBold": require("./assets/fonts/Poppins-SemiBold.ttf"),
+    "Poppins-Thin": require("./assets/fonts/Poppins-Thin.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <Loading />;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer>
+        <AuthProvider>
+          <SafeAreaProvider>
+            <Routes />
+          </SafeAreaProvider>
+        </AuthProvider>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
